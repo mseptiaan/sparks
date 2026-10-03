@@ -1,0 +1,6 @@
+# Keep the build context (and any accidental layer) free of data and history.
+.git
+eval/
+*.md
+Dockerfile
+.dockerignore

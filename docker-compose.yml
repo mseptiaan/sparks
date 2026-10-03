@@ -1,0 +1,20 @@
+# Production defaults; override with environment (see README).
+# Required: SPARKS_BACKEND_URL, and SPARKS_API_KEY unless the backend needs none.
+services:
+  sparks:
+    build: .
+    image: sparks:latest
+    ports:
+      - "8088:8088"
+    # Distroless nonroot image; also runs read-only (verified, no disk writes).
+    read_only: true
+    restart: unless-stopped
+    # No HEALTHCHECK: distroless has no shell/curl. Probe /healthz and
+    # /readyz from your orchestrator or load balancer instead.
+    command:
+      - -addr=:8088
+      - -backend-url=${SPARKS_BACKEND_URL:?set SPARKS_BACKEND_URL}
+      - -model=${SPARKS_MODEL:-}
+      - -api-key=${SPARKS_API_KEY:-}
+      - -reasoning=${SPARKS_REASONING:-false}
+      - -temps=${SPARKS_TEMPS:-default=1.0}
