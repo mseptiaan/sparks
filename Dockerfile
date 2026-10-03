@@ -17,6 +17,8 @@ ARG TARGETARCH
 RUN CGO_ENABLED=0 GOARCH=$TARGETARCH go build -trimpath -ldflags='-s -w' -o /out/sparks ./cmd/sparks
 
 FROM gcr.io/distroless/static-debian12:nonroot
+# Links ghcr.io/mseptiaan/sparks to this repo (auto-connects package on push).
+LABEL org.opencontainers.image.source="https://github.com/mseptiaan/sparks"
 COPY --from=build /out/sparks /sparks
 EXPOSE 8088
 USER nonroot:nonroot
